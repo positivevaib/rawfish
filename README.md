@@ -1,2 +1,2 @@
-# chess
-A simple chess program
+# rawfish
+Building a simple chess engine.

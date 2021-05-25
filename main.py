@@ -1,28 +1,41 @@
+import argparse
+
 import chess
 
 import next_move
 
-def main():
+def main(fen, color, turn):
     print('Welcome to a game against Rawfish!\n')
 
-    board = chess.Board()
+    if fen:
+        board = chess.Board(fen)
+    else:
+        board = chess.Board()
+
     print(board)
     print()
 
-    color = 2
-    while color not in [0, 1]:
-        color = int(input('\nChoose your color (0 for WHITE, 1 for BLACK): '))
+    if not color:
+        color = 2
+        while color not in [0, 1]:
+            color = int(input('\nChoose your color (0 for WHITE, 1 for BLACK): '))
 
-    print('\nYou chose {}.\n'.format('WHITE' if color == 0 else 'BLACK'))
+        print('\nYou chose {}.\n'.format('WHITE' if color == 0 else 'BLACK'))
 
-    play(board, (color+1)%2)
+    if not turn:
+        turn = 0
+
+    if turn != 0:
+        board.turn = not board.turn
+
+    play(board, (color+1)%2, turn)
 
 def get_fish_move(board):
     return next_move.get_next_move(board)
 
-def play(board, fish):
+def play(board, fish, turn):
     game_over = False
-    turn = 0
+
     while not game_over:
         if turn == fish:
             move = get_fish_move(board)
@@ -52,4 +65,11 @@ def play(board, fish):
 
         turn = (turn+1)%2
 
-main()
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--fen', type=str, default=None, help='Board initial state.')
+    parser.add_argument('--color', type=int, default=None, help='Player color.')
+    parser.add_argument('--turn', type=int, default=None, help='Turn number.')
+    args = parser.parse_args()
+
+    main(args.fen, args.color, args.turn)

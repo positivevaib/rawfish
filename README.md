@@ -1,3 +1,3 @@
 # rawfish
 
-A basic chess engine that uses minimax with alpha-beta pruning for search with custom depth.
+A simple chess engine that uses minimax with alpha-beta pruning for search with custom depth.
